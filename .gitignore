@@ -8,7 +8,9 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Data
+data
 data/raw/
+data/cleaned/
 data/interim/
 data/processed/
 *.csv
