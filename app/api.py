@@ -18,6 +18,7 @@ class CustomerInput(BaseModel):
     Contract: str
     PaymentMethod: str
 
+# Create Api to predict
 @app.post("/predict")
 def predict(input_data: CustomerInput):
     data = pd.DataFrame([input_data.dict()])
