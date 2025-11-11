@@ -1,104 +1,69 @@
-Here’s a complete, professional **README.md** for your churn prediction project — portfolio-friendly and aligned with your folder structure and Streamlit app.
+## Customer Churn Prediction
+An end-to-end machine learning project that predicts customer churn using XGBoost, built with a modular pipeline, Jupyter notebooks for analysis, and a Streamlit web app for deployment. This project demonstrates practical skills in data preprocessing, model tuning, evaluation, and deployment.
 
----
+### Objective
+Predict whether a customer is likely to churn (cancel their service) based on account and usage features. The goal is to help businesses reduce customer loss and improve retention through data-driven actions.
 
-```markdown
-# 🧠 Customer Churn Prediction
+### Business Impact
+- Customer retention costs are significantly lower than acquiring new users.  
+- Early churn detection enables targeted offers and proactive customer support.  
+- Predictive analytics improve customer lifetime value and overall profitability.
 
-End-to-end machine learning project predicting customer churn using **XGBoost**, built with clean modular code, notebooks for exploration, and a Streamlit web app for deployment.
-
----
-
-## 📂 Project Structure
-
-```
-
+### Project Structure
+```bash
 customer-churn-prediction/
 │
 ├── data/
-│   ├── raw/Customer-Churn.csv           # Original dataset
-│   └── processed/churn_cleaned.csv      # Preprocessed data
+│   ├── raw/
+│   │   └── Customer-Churn.csv             # Original dataset
+│   └── processed/
+│       └── churn_cleaned.csv              # Processed dataset
 │
 ├── models/
-│   ├── xgb_churn_full_tuned.pkl         # Final tuned model
-│   ├── onehot_encoder.pkl               # Encoder used in preprocessing
-│   └── train_columns.pkl                # Feature columns used for inference
+│   ├── xgb_churn_full_tuned.pkl           # Final tuned model
+│   ├── onehot_encoder.pkl                 # Saved encoder
+│   └── train_columns.pkl                  # Training feature list
 │
 ├── notebooks/
-│   ├── eda_preprocess.ipynb             # EDA & preprocessing exploration
-│   ├── train_model.ipynb                # Model training & evaluation
+│   ├── eda_preprocess.ipynb               # EDA & preprocessing exploration
+│   ├── train_model.ipynb                  # Model training & evaluation
 │
 ├── src/
-│   ├── preprocess.py                    # Data preprocessing functions
-│   ├── train_model.py                   # Model training logic
-│   ├── evaluate_model.py                # Evaluation metrics
-│   ├── predict.py                       # Inference pipeline
+│   ├── preprocess.py                      # Data preprocessing pipeline
+│   ├── train_model.py                     # Model training logic
+│   ├── evaluate_model.py                  # Evaluation metrics
+│   ├── predict.py                         # Inference pipeline
+│   ├── pipeline.py                        # Full automation script
 │
-├── app.py                               # Streamlit web app
-└── requirements.txt
-
+├── app.py                                 # Streamlit web app
+├── requirements.txt                       # Dependencies
+└── README.md                              # Project documentation
 ````
+### Project Workflow
 
----
+1. **Exploratory Data Analysis (EDA)**
+   * Analyzed feature distributions and churn trends.
+   * Identified missing values and data imbalances.
 
-## 🚀 Quick Start
+2. **Preprocessing Pipeline**
+   * Encoded categorical and binary features.
+   * Scaled numerical variables.
+   * Built modular functions for reproducibility.
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/<your-username>/customer-churn-prediction.git
-cd customer-churn-prediction
-````
+3. **Model Training and Tuning**
+   * Compared baseline models (Random Forest, XGBoost).
+   * Used RandomizedSearchCV for hyperparameter tuning.
+   * Handled class imbalance with `scale_pos_weight`.
 
-### 2. Create and activate environment
+4. **Model Evaluation**
+   * Measured performance with accuracy, precision, recall, F1-score, and confusion matrix.
+   * Selected the tuned XGBoost model (Round 2) for final deployment.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
+5. **Deployment**
+   * Developed a Streamlit web app for live predictions.
+   * Users can input customer data and receive churn probability.
 
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run preprocessing and training
-
-```bash
-python -m src.pipeline
-```
-
-### 5. Launch Streamlit app
-
-```bash
-streamlit run app.py
-```
-
----
-
-## 🧩 Project Workflow
-
-1. **EDA & Preprocessing** (`notebooks/eda_preprocess.ipynb`)
-
-   * Data inspection, visualization, and cleaning
-   * Encoding categorical features
-   * Scaling numerical variables
-
-2. **Model Training** (`notebooks/train_model.ipynb`)
-
-   * Baseline models: Random Forest & XGBoost
-   * Class imbalance handling (`scale_pos_weight`)
-   * Hyperparameter tuning with `RandomizedSearchCV`
-   * Model evaluation (precision, recall, F1, ROC)
-
-3. **Deployment App** (`app.py`)
-
-   * Streamlit interface for user input
-   * Real-time churn prediction and probability display
-
----
-
-## 📈 Key Results
+### Model Performance
 
 | Metric            | Round 1 | Round 2 (Final) |
 | :---------------- | :-----: | :-------------: |
@@ -107,126 +72,57 @@ streamlit run app.py
 | Precision (Churn) |   0.52  |       0.56      |
 | F1 (Churn)        |   0.64  |       0.63      |
 
-**Final Model:** Round 2 tuned XGBoost — better generalization and precision–recall balance.
+**Final Model:** Tuned XGBoost (Round 2) — more balanced precision and recall.
+
+### Key Learnings
+
+* Designed a modular, reusable ML pipeline.
+* Handled class imbalance using `scale_pos_weight`.
+* Tuned hyperparameters effectively with cross-validation.
+* Built and deployed a working Streamlit web app for predictions.
+* Practiced clean project structure and documentation for reproducibility.
 
 ---
 
-## 🧰 Tech Stack
+### Tech Stack
 
-* **Python 3.10+**
-* **Pandas, NumPy, Scikit-learn, XGBoost**
-* **Matplotlib, Seaborn**
-* **Streamlit** for deployment
-* **Joblib** for model persistence
-
----
-
-## 📊 Example Prediction Output
-
-When a user submits customer details in the Streamlit app:
-
-```
-🎯 Prediction Result:
-🟩 No Churn
-Churn Probability: 22.50%
-```
+* Python 3.10+
+* Pandas, NumPy, Scikit-learn, XGBoost
+* Matplotlib, Seaborn
+* Streamlit
+* Joblib
 
 ---
 
-## 📘 Next Steps
+## How to Run Locally
 
-* Add more advanced balancing (e.g., SMOTE)
-* Implement cross-validation monitoring
-* Integrate with AWS S3 for model storage
-* Add Docker container for reproducible deployment
+### 1. Clone the Repository
 
----
-
-## 👨‍💻 Author
-
-**Harman Singh**
-📍 Machine Learning & Data Science Enthusiast
-📫 [LinkedIn](https://www.linkedin.com/in/) • [GitHub](https://github.com/)
-
----
-
-```
-
----
-
-Would you like me to tailor this README to make it sound slightly more *portfolio-oriented* (recruiter-facing), emphasizing your learning process and skills demonstrated?
-```
-Here’s a complete, professional **README.md** for your churn prediction project — portfolio-friendly and aligned with your folder structure and Streamlit app.
-
----
-
-```markdown
-# 🧠 Customer Churn Prediction
-
-End-to-end machine learning project predicting customer churn using **XGBoost**, built with clean modular code, notebooks for exploration, and a Streamlit web app for deployment.
-
----
-
-## 📂 Project Structure
-
-```
-
-customer-churn-prediction/
-│
-├── data/
-│   ├── raw/Customer-Churn.csv           # Original dataset
-│   └── processed/churn_cleaned.csv      # Preprocessed data
-│
-├── models/
-│   ├── xgb_churn_full_tuned.pkl         # Final tuned model
-│   ├── onehot_encoder.pkl               # Encoder used in preprocessing
-│   └── train_columns.pkl                # Feature columns used for inference
-│
-├── notebooks/
-│   ├── eda_preprocess.ipynb             # EDA & preprocessing exploration
-│   ├── train_model.ipynb                # Model training & evaluation
-│
-├── src/
-│   ├── preprocess.py                    # Data preprocessing functions
-│   ├── train_model.py                   # Model training logic
-│   ├── evaluate_model.py                # Evaluation metrics
-│   ├── predict.py                       # Inference pipeline
-│
-├── app.py                               # Streamlit web app
-└── requirements.txt
-
-````
-
----
-
-## 🚀 Quick Start
-
-### 1. Clone the repository
 ```bash
 git clone https://github.com/<your-username>/customer-churn-prediction.git
 cd customer-churn-prediction
-````
+```
 
-### 2. Create and activate environment
+### 2. Create and Activate Virtual Environment
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate         # On Windows: .venv\Scripts\activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run preprocessing and training
+### 4. Run the Training Pipeline
 
 ```bash
 python -m src.pipeline
 ```
 
-### 5. Launch Streamlit app
+### 5. Launch the Streamlit App
 
 ```bash
 streamlit run app.py
@@ -234,83 +130,30 @@ streamlit run app.py
 
 ---
 
-## 🧩 Project Workflow
-
-1. **EDA & Preprocessing** (`notebooks/eda_preprocess.ipynb`)
-
-   * Data inspection, visualization, and cleaning
-   * Encoding categorical features
-   * Scaling numerical variables
-
-2. **Model Training** (`notebooks/train_model.ipynb`)
-
-   * Baseline models: Random Forest & XGBoost
-   * Class imbalance handling (`scale_pos_weight`)
-   * Hyperparameter tuning with `RandomizedSearchCV`
-   * Model evaluation (precision, recall, F1, ROC)
-
-3. **Deployment App** (`app.py`)
-
-   * Streamlit interface for user input
-   * Real-time churn prediction and probability display
-
----
-
-## 📈 Key Results
-
-| Metric            | Round 1 | Round 2 (Final) |
-| :---------------- | :-----: | :-------------: |
-| Accuracy          |   0.75  |       0.78      |
-| Recall (Churn)    |   0.81  |       0.73      |
-| Precision (Churn) |   0.52  |       0.56      |
-| F1 (Churn)        |   0.64  |       0.63      |
-
-**Final Model:** Round 2 tuned XGBoost — better generalization and precision–recall balance.
-
----
-
-## 🧰 Tech Stack
-
-* **Python 3.10+**
-* **Pandas, NumPy, Scikit-learn, XGBoost**
-* **Matplotlib, Seaborn**
-* **Streamlit** for deployment
-* **Joblib** for model persistence
-
----
-
-## 📊 Example Prediction Output
-
-When a user submits customer details in the Streamlit app:
+### Example App Output
 
 ```
-🎯 Prediction Result:
-🟩 No Churn
-Churn Probability: 22.50%
+Prediction Result:
+No Churn
+Churn Probability: 22.50 %
 ```
 
 ---
 
-## 📘 Next Steps
+### Future Improvements
 
-* Add more advanced balancing (e.g., SMOTE)
-* Implement cross-validation monitoring
-* Integrate with AWS S3 for model storage
-* Add Docker container for reproducible deployment
+* Add explainability using SHAP or LIME.
+* Automate retraining with live data updates.
+* Integrate model insights with CRM systems.
+* Containerize and deploy via Docker or AWS.
 
 ---
 
-## 👨‍💻 Author
+### Author
 
 **Harman Singh**
-📍 Machine Learning & Data Science Enthusiast
-📫 [LinkedIn](https://www.linkedin.com/in/) • [GitHub](https://github.com/)
+Machine Learning & Data Science Enthusiast
+Based in Germany
+[LinkedIn](https://www.linkedin.com/in/) • [GitHub](https://github.com/)
 
----
-
-```
-
----
-
-Would you like me to tailor this README to make it sound slightly more *portfolio-oriented* (recruiter-facing), emphasizing your learning process and skills demonstrated?
 ```
