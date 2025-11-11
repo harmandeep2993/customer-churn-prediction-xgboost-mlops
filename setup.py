@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="customer_churn_prediction",
     version="1.0.0",
-    author="Harman Singh",
+    author="Harmandeep Singh",
     author_email="",
     description="End-to-end customer churn prediction project using XGBoost and Streamlit.",
     packages=find_packages(where="src"),
