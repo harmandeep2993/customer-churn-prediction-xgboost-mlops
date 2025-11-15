@@ -1,10 +1,8 @@
 import joblib
 import pandas as pd
-import os
 from src.utils.logger import get_logger
 from src.utils.config_loader import load_config
 from src.components.data_preprocessing import DataPreprocessing
-
 
 class ModelPredictor:
     """Handles loading model and making churn predictions."""
@@ -20,8 +18,7 @@ class ModelPredictor:
         """Load trained churn prediction model."""
         try:
             self.logger.info(f"Loading model from {self.model_path}")
-            model = joblib.load(self.model_path)
-            return model
+            return joblib.load(self.model_path)
         except FileNotFoundError:
             self.logger.error(f"Model not found at {self.model_path}")
             raise
@@ -32,28 +29,30 @@ class ModelPredictor:
     def predict_churn(self, input_df: pd.DataFrame, model):
         """
         Preprocess input data and predict churn probability.
-
-        Parameters:
-            input_df (pd.DataFrame): Raw input features.
-            model: Loaded trained model.
-
-        Returns:
-            tuple: (pred, prob)
+        Ensures exact same structure as training data.
         """
         try:
             self.logger.info("Starting churn prediction.")
-
-            # Load encoder and preprocess
             encoder = joblib.load(self.encoder_path)
-            preprocessor = DataPreprocessing()
-            processed = preprocessor.full_preprocess_pipeline(input_df, encoder=encoder, fit_encoder=False)
-
-            # Align with training columns
             train_columns = joblib.load(self.columns_path)
-            for col in train_columns:
-                if col not in processed.columns:
-                    processed[col] = 0
-            processed = processed[train_columns]
+
+            preprocessor = DataPreprocessing()
+            processed = preprocessor.full_preprocess_pipeline(
+                input_df.copy(), encoder=encoder, fit_encoder=False
+            )
+
+            # Align features with training columns
+            processed = processed.reindex(columns=train_columns, fill_value=0)
+
+            # Check if all zeros (means mismatch)
+            if processed.sum().sum() == 0:
+                self.logger.warning("Processed input contains all zeros — possible feature mismatch.")
+                print("⚠️ Feature mismatch: check category names and preprocessing consistency.")
+
+            print("\n=== DEBUG SHAPES ===")
+            print("Processed shape:", processed.shape)
+            print("Non-zero count:", (processed != 0).sum().sum())
+            print("First row preview:\n", processed.head(1))
 
             # Predict
             pred = model.predict(processed)
@@ -66,31 +65,30 @@ class ModelPredictor:
             self.logger.error(f"Error during prediction: {e}")
             raise
 
-
 if __name__ == "__main__":
     predictor = ModelPredictor()
     model = predictor.load_model()
 
     sample_input = pd.DataFrame([{
         "gender": "Female",
-        "SeniorCitizen": "Yes",
+        "SeniorCitizen": "No",
         "Partner": "No",
         "Dependents": "No",
-        "tenure": 5,
+        "tenure": 3,
         "PhoneService": "Yes",
         "MultipleLines": "Yes",
         "InternetService": "Fiber optic",
         "OnlineSecurity": "No",
         "OnlineBackup": "No",
-        "DeviceProtection": "Yes",
+        "DeviceProtection": "No",
         "TechSupport": "No",
         "StreamingTV": "Yes",
         "StreamingMovies": "Yes",
         "Contract": "Month-to-month",
         "PaperlessBilling": "Yes",
         "PaymentMethod": "Electronic check",
-        "MonthlyCharges": 80.0,
-        "TotalCharges": 400.0
+        "MonthlyCharges": 95.5,
+        "TotalCharges": 280.0
     }])
 
     pred, prob = predictor.predict_churn(sample_input, model)
