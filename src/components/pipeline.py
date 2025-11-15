@@ -31,13 +31,15 @@ class ChurnPipeline:
 
             # 2. Preprocess
             df, encoder = self.preprocessor.full_preprocess_pipeline(df, fit_encoder=True)
-            self.ingestion.save_processed_data(df)
+            self.ingestion.save_processed_data(df, self.config["data"]["processed_path"])
             joblib.dump(encoder, self.config["model"]["encoder"])
             self.logger.info("Preprocessing complete. Encoder saved.")
 
             # 3. Split
             X = df.drop("Churn", axis=1)
-            y = df["Churn"]
+            # ✅ FIX: Convert target variable to numeric
+            y = df["Churn"].replace({"Yes": 1, "No": 0})
+
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y,
                 test_size=self.config["train"]["test_size"],
@@ -50,7 +52,9 @@ class ChurnPipeline:
             param_dist = self.config["train"]["param_dist"]
 
             # 5. Train and tune
-            model, best_params = self.trainer.train_xgb_model(X_train, y_train, param_dist)
+            model, best_params = self.trainer.train_xgb_model(
+                X_train=X_train, y_train=y_train, n_iter=15, scoring='recall'
+            )
             self.logger.info(f"Model trained successfully. Best params: {best_params}")
 
             # 6. Save artifacts
@@ -68,7 +72,6 @@ class ChurnPipeline:
         except Exception as e:
             self.logger.error(f"Pipeline failed: {e}")
             raise
-
 
 if __name__ == "__main__":
     pipeline = ChurnPipeline()
